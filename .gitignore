@@ -1,0 +1,15 @@
+#Text files
+*.txt
+
+#json files
+*.json
+
+#pycache
+__pycache__/
+*.pyc
+
+#vscode
+.vscode/
+
+#venv
+my_env/
