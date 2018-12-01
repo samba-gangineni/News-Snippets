@@ -1,5 +1,4 @@
 from __future__ import print_function
-from newsapi import NewsApiClient
 from flask import Flask, render_template
 
 __author__="Sambasiva Rao Gangineni"
