@@ -3,37 +3,55 @@
 '''
 from __future__ import print_function
 from nltk.tokenize import RegexpTokenizer
+from stopwords import get_stopwords
+from nltk.stem.porter import PorterStemmer
+from datetime import datetime
 import json
-
+import sys
 
 __author__="Sambasiva Rao Gangineni"
+
+
 
 '''
     Preprocessing the data
 '''
-#Reading in the newsarticles
-news_content = []
+#Reading in the 50000 newsarticles
 url = []
-title=[]
-dop=[]
-count = 0
-with open('news-reuters-2014.json','r') as news:
+title = []
+dop = []
+content = []
+count =  0
+fifty_thousand = 0
+with open(sys.argv[1],'r') as news:
     for article in news:
-        try:
-            test = json.loads(article)
-            urls = test.get('url')
-            dops = test.get('dop')
-            texts = test.get('text')
-            titles = test.get('title')
-            if '(Reuters)' in texts and '(Reporting by ' in texts:
-                texts = texts[texts.index('(Reuters)')+9:texts.index('(Reporting by ')]
-            news_content.append(texts)
-            url.append(urls)
-            title.append(titles)
-            dop.append(dops)
-        except:
-            count+=1
+        if fifty_thousand<=49999:
+            try:
+                # Loadings the json object
+                test = json.loads(article)
 
-# Tokenising the words
+                #Checking whether the article has all the components
+                urls = test.get('url')
+                titles = test.get('title')
+                dops = test.get('dop')
+                texts = test.get('text')
 
+                #Removing the reporters name
+                if '(Reuters)' in texts and '(Reporting by ' in texts:
+                    texts = texts[texts.index('(Reuters)')+9:texts.index('(Reporting by ')]
+                
+                #Appending the articles
+                url.append(urls)
+                title.append(titles)
+                dop.append(dops)
+                content.append(texts)
+
+                #Condition for reading in the 50000 articles
+                fifty_thousand+=1
+                
+            except:
+                count+=1
+
+    
+    
 
