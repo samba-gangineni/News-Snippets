@@ -4,17 +4,11 @@
 from __future__ import print_function
 from nltk.tokenize import RegexpTokenizer
 from stopwords import get_stopwords
-from datetime import datetime
 from gensim import models,corpora
 from copy import deepcopy
-from pprint import pprint
 import json
 import sys
 import matplotlib.pyplot as plt
-import spacy
-import pyLDAvis
-import pyLDAvis.gensim
-import operator
 import pickle
 
 '''
@@ -57,10 +51,10 @@ title = []
 dop = []
 content = []
 count =  0
-twenty_thousand = 0
+ten_thousand = 0
 with open(sys.argv[1],'r') as news:
     for article in news:
-        if twenty_thousand<=20000:
+        if ten_thousand<=10000:
             try:
                 # Loadings the json object
                 test = json.loads(article)
@@ -82,7 +76,7 @@ with open(sys.argv[1],'r') as news:
                 content.append(texts)
 
                 #Condition for reading in the 50000 articles
-                twenty_thousand+=1
+                ten_thousand+=1
 
             except:
                 count+=1
@@ -115,26 +109,19 @@ bigram = models.Phrases(token_content, min_count=5, threshold = 100)
 bigram_mod = models.phrases.Phraser(bigram)
 bigram_content = [bigram_mod[i] for i in processed_content]
 
-# Lemmatising using spacy
-nlp = spacy.load('en',disable=['parser','ner'])
-allowed_tags = ['NOUN','ADJ','VERB','ADV']
-lemmatised_content = []
-for i in bigram_content:
-    docu = nlp(" ".join(i))
-    lemmatised_content.append([j.lemma_ for j in docu if j.pos_ in allowed_tags])
 
 '''
     Topic modelling using LDA
 '''
 # Building a dictionary of the all documents
-dictionary = corpora.Dictionary(processed_content)
+dictionary = corpora.Dictionary(bigram_content)
 
 # Building the bag of words representation for each document
-corpus = [dictionary.doc2bow(text) for text in processed_content]
+corpus = [dictionary.doc2bow(text) for text in bigram_content]
 
 #Building the LDA model with optimum topics
 topics_list = range(2,12)
-lda_model, num_topics, model_coherence, list_coherences, list_preplexity, models_tosave = optimum_topics(corpus,topics_list,dictionary,350,processed_content)
+lda_model, num_topics, model_coherence, list_coherences, list_preplexity, models_tosave = optimum_topics(corpus,topics_list,dictionary,350,bigram_content)
 
 '''
     Evaluating the model
@@ -183,6 +170,14 @@ with open('preplexity.pkl','w') as f:
 #Saving the coherence list for plotting later
 with open('coherence.pkl','w') as f:
     pickle.dump(list_coherences,f)
+
+#Saving the dictionary
+with open('dictionary.pkl','w') as f:
+    pickle.dump(dictionary,f)
+
+# saving the corpus
+with open('corpus.pkl','w') as f:
+    pickle.dump(corpus,f)
 
 # saving the topics
 for i in range(0,len(models_tosave)):

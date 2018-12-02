@@ -17,3 +17,7 @@ my_env/
 # models
 *.model.*
 *.model
+
+# images
+*.png
+.png
