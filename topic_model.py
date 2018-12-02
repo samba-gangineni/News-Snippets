@@ -27,7 +27,7 @@ count =  0
 ten_thousand = 0
 with open(sys.argv[1],'r') as news:
     for article in news:
-        if ten_thousand<=50000:
+        if ten_thousand<=10000:
             try:
                 # Loadings the json object
                 test = json.loads(article)
@@ -94,5 +94,20 @@ print("LDA Model:")
 for i in range(10):
     print("topic {}:{}".format(i,lda_model.print_topic(i,10)))
 
+'''
+    Model Evaluation
+'''
+#model perplexity calculation
+model_preplexity = lda_model.log_perplexity(corpus)
+
+# Topic coherence calculation
+topic_coherence = models.CoherenceModel(model=lda_model, texts=processed_content, dictionary=dictionary, coherence='c_v')
+model_coherence = topic_coherence.get_coherence()
+print("Perplexity {}".format(model_preplexity))
+print("Coherence {}".format(model_coherence))
+
+'''
+    Visualising the model
+'''
 starttime3 = datetime.now()
 print("Total time for reading",starttime3-starttime2)
