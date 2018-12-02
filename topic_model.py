@@ -8,7 +8,8 @@ from datetime import datetime
 from gensim import models,corpora
 import json
 import sys
-import re
+import pyLDAvis
+import pyLDAvis.gensim
 
 __author__="Sambasiva Rao Gangineni"
 
@@ -109,5 +110,9 @@ print("Coherence {}".format(model_coherence))
 '''
     Visualising the model
 '''
+visualisation = pyLDAvis.gensim.prepare(lda_model, corpus, dictionary)
+
+# Saving the visualisation to the html
+pyLDAvis.save_html(visualisation,'topic_model.html')
 starttime3 = datetime.now()
 print("Total time for reading",starttime3-starttime2)
