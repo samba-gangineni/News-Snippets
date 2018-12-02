@@ -94,7 +94,8 @@ english_stopwords.append('reutuers')
 token_content = []
 processed_content = []
 for article in content:
-    tokens = tokenizer.tokenize(article.lower())
+    tokens_ascii = tokenizer.tokenize(article.lower())
+    tokens = [item.encode('utf8') for item in tokens_ascii]
     while 'reuters' in tokens or 's' in tokens or 'said' in tokens or 't' in tokens:
         if 'reuters' in tokens:
             tokens.remove('reuters')
