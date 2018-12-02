@@ -23,7 +23,7 @@ def optimum_topics(corpus,list_topics,dictionary,iterations,processed_content):
     topics = 0
     model_coherences = []
     for i in range(0,len(list_topics)):
-        lda_model = models.LdaModel(corpus=deepcopy(corpus),num_topics=list_topics[i],id2word=deepcopy(dictionary),iterations=iterations,passes=10)
+        lda_model = models.LdaModel(corpus=deepcopy(corpus),num_topics=list_topics[i],id2word=deepcopy(dictionary),iterations=iterations)
 
         #Calculating the coherence
         topic_coherence = models.CoherenceModel(model=lda_model, texts=processed_content, dictionary=dictionary, coherence='c_v')
@@ -41,7 +41,7 @@ __author__="Sambasiva Rao Gangineni"
 '''
     Preprocessing the data
 '''
-starttime1 = datetime.now()
+
 #Reading in the 50000 newsarticles
 url = []
 title = []
@@ -51,7 +51,7 @@ count =  0
 ten_thousand = 0
 with open(sys.argv[1],'r') as news:
     for article in news:
-        if ten_thousand<=15000:
+        if ten_thousand<=10000:
             try:
                 # Loadings the json object
                 test = json.loads(article)
@@ -77,9 +77,6 @@ with open(sys.argv[1],'r') as news:
 
             except:
                 count+=1
-
-starttime2 = datetime.now()
-print("Total time for reading",starttime2-starttime1)
 
 #Tokenising, stopping and stemming the content
 tokenizer = RegexpTokenizer(r'[a-zA-Z]{3,}')
@@ -113,7 +110,7 @@ corpus = [dictionary.doc2bow(text) for text in processed_content]
 
 #Building the LDA model with optimum topics
 topics_list = range(2,12)
-lda_model, num_topics, model_coherence, list_coherences = optimum_topics(corpus,topics_list,dictionary,500,processed_content)
+lda_model, num_topics, model_coherence, list_coherences = optimum_topics(corpus,topics_list,dictionary,150,processed_content)
 
 '''
     Model Evaluation
@@ -178,6 +175,3 @@ with open('coherence.pkl','w') as f:
 
 # saving the topics
 lda_model.save('lda.model')
-
-starttime3 = datetime.now()
-print("Total time for reading",starttime3-starttime2)
