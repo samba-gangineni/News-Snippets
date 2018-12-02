@@ -2,6 +2,7 @@
     Get the data from the google news api for testing the top modelling
 '''
 from __future__ import print_function
+from __future__ import unicode_literals
 from nltk.tokenize import RegexpTokenizer
 from stopwords import get_stopwords
 from gensim import models,corpora
@@ -10,6 +11,7 @@ import json
 import sys
 import matplotlib.pyplot as plt
 import pickle
+import spacy
 
 '''
     Getting number of optimal topics based on the topic coherence
@@ -64,7 +66,7 @@ with open(sys.argv[1],'r') as news:
                 titles = test.get('title')
                 dops = test.get('dop')
                 texts = test.get('text')
-
+                texts = unicode(texts)
                 #Removing the reporters name
                 if '(Reuters)' in texts and '(Reporting by ' in texts:
                     texts = texts[texts.index('(Reuters)')+9:texts.index('(Reporting by ')]
@@ -101,19 +103,29 @@ bigram = models.Phrases(token_content, min_count=5, threshold = 100)
 bigram_mod = models.phrases.Phraser(bigram)
 bigram_content = [bigram_mod[i] for i in processed_content]
 
+# lemmatisation
+nlp = spacy.load('en',disable=['parser','ner'])
+allowed_postags=['NOUN', 'ADJ', 'VERB', 'ADV']
+lemmatised_content=[]
+for each_article in bigram_content:
+    try:
+        doc = nlp(" ".join(each_article))
+        lemmatised_content.append([tokens1.lemma_ for tokens1 in doc if tokens1.pos_ in allowed_postags])
+    except:
+        print(each_article)
 
 '''
     Topic modelling using LDA
 '''
 # Building a dictionary of the all documents
-dictionary = corpora.Dictionary(bigram_content)
+dictionary = corpora.Dictionary(lemmatised_content)
 
 # Building the bag of words representation for each document
-corpus = [dictionary.doc2bow(text) for text in bigram_content]
+corpus = [dictionary.doc2bow(text) for text in lemmatised_content]
 
 #Building the LDA model with optimum topics
 topics_list = range(2,12)
-lda_model, num_topics, model_coherence, list_coherences, list_preplexity, models_tosave = optimum_topics(corpus,topics_list,dictionary,150,bigram_content)
+lda_model, num_topics, model_coherence, list_coherences, list_preplexity, models_tosave = optimum_topics(corpus,topics_list,dictionary,150,lemmatised_content)
 
 '''
     Evaluating the model
