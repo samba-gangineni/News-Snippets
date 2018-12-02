@@ -54,7 +54,7 @@ count =  0
 ten_thousand = 0
 with open(sys.argv[1],'r') as news:
     for article in news:
-        if ten_thousand<=10000:
+        if ten_thousand<=25000:
             try:
                 # Loadings the json object
                 test = json.loads(article)
@@ -68,37 +68,29 @@ with open(sys.argv[1],'r') as news:
                 #Removing the reporters name
                 if '(Reuters)' in texts and '(Reporting by ' in texts:
                     texts = texts[texts.index('(Reuters)')+9:texts.index('(Reporting by ')]
-                
-                #Appending the articles
-                url.append(urls)
-                title.append(titles)
-                dop.append(dops)
-                content.append(texts)
+                if 'button' not in texts and 'command box' not in texts and 'double click' not in texts and 'click' not in texts:
+                    #Appending the articles
+                    url.append(urls)
+                    title.append(titles)
+                    dop.append(dops)
+                    content.append(texts)
 
-                #Condition for reading in the 50000 articles
-                ten_thousand+=1
+                    #Condition for reading in the 25000 articles
+                    ten_thousand+=1
 
             except:
                 count+=1
 
+
 #Tokenising
 tokenizer = RegexpTokenizer(r'[a-zA-Z]{3,}')
 english_stopwords = get_stopwords('en')
-english_stopwords.append('reutuers')
+english_stopwords.append('reuters')
+english_stopwords.append('said')
 token_content = []
 processed_content = []
 for article in content:
-    tokens_ascii = tokenizer.tokenize(article.lower())
-    tokens = [item.encode('utf8') for item in tokens_ascii]
-    while 'reuters' in tokens or 's' in tokens or 'said' in tokens or 't' in tokens:
-        if 'reuters' in tokens:
-            tokens.remove('reuters')
-        if 's' in tokens:
-            tokens.remove('s')
-        if 'said' in tokens:
-            tokens.remove('said')
-        if 't' in tokens:
-            tokens.remove('t')
+    tokens = tokenizer.tokenize(article.lower())
     token_content.append(tokens)
     stopped_tokens = [i for i in tokens if i not in english_stopwords]
     processed_content.append(stopped_tokens)
@@ -121,7 +113,7 @@ corpus = [dictionary.doc2bow(text) for text in bigram_content]
 
 #Building the LDA model with optimum topics
 topics_list = range(2,12)
-lda_model, num_topics, model_coherence, list_coherences, list_preplexity, models_tosave = optimum_topics(corpus,topics_list,dictionary,350,bigram_content)
+lda_model, num_topics, model_coherence, list_coherences, list_preplexity, models_tosave = optimum_topics(corpus,topics_list,dictionary,150,bigram_content)
 
 '''
     Evaluating the model

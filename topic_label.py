@@ -67,22 +67,12 @@ pyLDAvis.save_html(visualisation,'templates/topic_model.html')
 '''
 tokenizer = RegexpTokenizer(r'[a-zA-Z]{3,}')
 english_stopwords = get_stopwords('en')
-english_stopwords.append('reutuers')
-
+english_stopwords.append('reuters')
+english_stopwords.append('said')
 token_content = []
 processed_content = []
 for i in content:
     tokens = tokenizer.tokenize(i.lower())
-    while 'reuters' in tokens or 's' in tokens or 'said' in tokens or 't' in tokens:
-        if 'reuters' in tokens:
-            tokens.remove('reuters')
-        if 's' in tokens:
-            tokens.remove('s')
-        if 'said' in tokens:
-            tokens.remove('said')
-        if 't' in tokens:
-            tokens.remove('t')
-    
     token_content.append(tokens)
     stopped_tokens = [j for j in tokens if j not in english_stopwords]
     processed_content.append(stopped_tokens)
