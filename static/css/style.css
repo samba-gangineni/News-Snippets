@@ -1,0 +1,65 @@
+/* background color */
+body{
+    background-color: rgb(204, 178, 32);
+}
+
+/* top navigation bar */
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+/* navigation bar links */
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+    float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Creating the horizontal scrolling */
+.news{
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin: 40px;
+}
+
+/* cards */
+.articles{
+    perspective: 100rem;
+    padding: 40px;
+    margin:40px;
+    border: solid grey 2px;
+    border-radius: 20px;
+    display: inline-block;
+    height: 150px;
+    width: 90px;
+}
+
+/* hiding the scroll bar */
+::-webkit-scrollbar {
+    display: none;
+  }
+
+/* Styling the card */
+.articlesFront{
+    transition: all .8s;
+}
+
+.articlesFront:hover{
+    transform: rotateY(180deg);
+}
