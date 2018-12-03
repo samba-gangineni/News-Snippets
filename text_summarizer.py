@@ -149,7 +149,8 @@ for article in content:
     # making the result into a sentence
     if result is not None:
         summary = " ".join(result)
-    
+    else:
+        summary=None    
     # Appending the result to a list
     summarized_content.append(summary)
 
