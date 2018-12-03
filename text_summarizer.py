@@ -2,6 +2,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from nltk.corpus import stopwords
 from nltk.cluster.util import cosine_distance
+import numpy as np
 
 __author__="Sambasiva Rao"
 
@@ -13,8 +14,19 @@ __author__="Sambasiva Rao"
     - Normalising the similarity along the row 
 '''
 # Text rank algorithm
-def text_rank():
-    pass
+def text_rank(similarity_matrix,precision,damping_factor):
+    vector_length = len(similarity_matrix)
+    
+    # Initializing the rank vector
+    rank_vector = np.ones(vector_length)/vector_length
+
+    # Algorithm
+    while True:
+        new_ranks = (np.ones(vector_length)*(1-damping_factor)/vector_length)+damping_factor*(similarity_matrix.T.dot(rank_vector))
+        change = abs(new_ranks-rank_vector).sum()
+        if change<=precision:
+            return new_ranks
+        rank_vector = new_ranks
 
 # Calculating the similarity between the sentences
 def sentence_similarity(sent1,sent2,stopwords=None):
@@ -52,4 +64,4 @@ def sentence_similarity(sent1,sent2,stopwords=None):
 # constructing a sentence similarity matrix
 def build_similarity_matrix():
     pass
-    
+
