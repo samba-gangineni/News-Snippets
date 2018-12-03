@@ -67,10 +67,11 @@ with open(sys.argv[1],'r') as news:
                 dops = test.get('dop')
                 texts = test.get('text')
                 texts = unicode(texts)
+                texts = texts.lstrip()
                 #Removing the reporters name
                 if '(Reuters)' in texts and '(Reporting by ' in texts:
                     texts = texts[texts.index('(Reuters)')+9:texts.index('(Reporting by ')]
-                if 'button' not in texts and 'command box' not in texts and 'double click' not in texts and 'click' not in texts:
+                if 'button' not in texts and 'command box' not in texts and 'double click' not in texts and 'click' not in texts and texts!='':
                     #Appending the articles
                     url.append(urls)
                     title.append(titles)
