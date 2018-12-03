@@ -108,6 +108,6 @@ for each_doc in corpus_bigram:
 '''
     Saving the labels for display
 '''
- # Saving the labels
+# Saving the labels
 with open('labels.pkl','w') as f:
     pickle.dump(labels,f)
