@@ -62,6 +62,25 @@ def sentence_similarity(sent1,sent2,stopwords=None):
     return 1-cosine_distance(vector1,vector2)
 
 # constructing a sentence similarity matrix
-def build_similarity_matrix():
-    pass
+def build_similarity_matrix(sentences, stopwords=None):
+    
+    # number of sentences
+    num_sentences = len(sentences)
+
+    #Intializing the matrix with zeros
+    similarity_matrix = np.zeros((num_sentences,num_sentences))
+
+    # Computing the similarity between two sentences and adding to the matrix
+    for i in range(num_sentences):
+        for j in range(num_sentences):
+            # As we will be comparing the distance between the same sentence, hence we will skip it
+            if i==j:
+                continue
+            similarity_matrix[i][j] = sentence_similarity(sentences[i],sentences[j],stopwords)
+
+    # Normalising the matrix
+    for i in range(num_sentences):
+        similarity_matrix[i]/=similarity_matrix[i].sum()
+    
+    return similarity_matrix
 
