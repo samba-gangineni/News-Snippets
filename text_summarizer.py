@@ -5,7 +5,9 @@ from nltk.corpus import stopwords
 from nltk.cluster.util import cosine_distance
 from operator import itemgetter
 import numpy as np
+import nltk.data
 import pickle
+import string
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -20,7 +22,7 @@ __author__="Sambasiva Rao"
 # Text rank algorithm
 def text_rank(similarity_matrix,precision,damping_factor):
     vector_length = len(similarity_matrix)
-    
+
     # Initializing the rank vector
     rank_vector = np.ones(vector_length)/vector_length
     # Algorithm
@@ -37,7 +39,7 @@ def sentence_similarity(sent1,sent2,stopwords=None):
     # checking if the stop words are provided are not.
     if stopwords is None:
         stopwords=[]
-    
+
     # lowering all the words in each sentence
     sent1 = [word.lower() for word in sent1]
     sent2 = [word.lower() for word in sent2]
@@ -60,7 +62,8 @@ def sentence_similarity(sent1,sent2,stopwords=None):
         if word in stopwords:
             continue
         vector2[allwords.index(word)]+=1
-    
+    if np.isnan(cosine_distance(vector1,vector2)):
+        return 0
     # Returning the similarity
     return 1-cosine_distance(vector1,vector2)
 
@@ -80,7 +83,7 @@ def similarity_matrix(sentences, stopwords=None):
             if i==j:
                 continue
             similarity_matrix[i][j] = sentence_similarity(sentences[i],sentences[j],stopwords)
-
+    
     # Normalising the matrix
     for i in range(num_sentences):
         if similarity_matrix[i].sum()!=0:
@@ -90,17 +93,21 @@ def similarity_matrix(sentences, stopwords=None):
 
 # summarising and getting top sentences
 def summarize_article(sentences,num_of_sentences, stopwords = None):
-
+    
     # Calculating the similarity matrix for the article
     s_matrix = similarity_matrix(sentences, stopwords)
-
+    
     # Generating the rank vector
     sentence_ranks = text_rank(s_matrix,0.0001,0.85)
-
+    
     # Sorting the sentence ranks and taking the required number of sentences
     ranked_sentence_indexes = [item[0] for item in sorted(enumerate(sentence_ranks), key=lambda item: -item[1])]
     selected_sentences = sorted(ranked_sentence_indexes[:num_of_sentences])
-    summary = itemgetter(*selected_sentences)(sentences)
+    try:
+        summary = itemgetter(*selected_sentences)(sentences)
+    except:
+        print(selected_sentences)
+        return None
     return summary
 
 # Loading the news content
@@ -116,7 +123,8 @@ english_stopwords.append('_')
 # Summarising all the articles
 summarized_content = []
 for article in content:
-    article = article.split('.')
+    tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+    article = tokenizer.tokenize(article)
     while '' in article or '*' in article or '-' in article:
         if '' in article:
             article.remove('')
@@ -126,15 +134,22 @@ for article in content:
             article.remove('-')
     
     sentences = []
+    
     for sentence in article:
-        se.append(sentence.split())
+        if len(sentence)>1:
+            # sentence = sentence.encode("ascii","ignore").translate(None,string.punctuation).lstrip()
+            sentences.append(sentence.split())
+    
+    while [] in sentences:
+        sentences.remove([])
     
     #summarising
     result = summarize_article(sentences,1,english_stopwords)
 
     # making the result into a sentence
-    summary = " ".join(result[0])
-    print(summary)
+    if result is not None:
+        summary = " ".join(result)
+    
     # Appending the result to a list
     summarized_content.append(summary)
 
