@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import unicode_literals
 from gensim import models,corpora
 from nltk.tokenize import RegexpTokenizer
 from stopwords import get_stopwords
@@ -7,6 +8,7 @@ import operator
 import pyLDAvis
 import pyLDAvis.gensim
 import sys
+import spacy
 
 __author__="Sambasiva Rao Gangineni"
 
@@ -82,8 +84,19 @@ bigram = models.Phrases(token_content, min_count=5, threshold = 100)
 bigram_mod = models.phrases.Phraser(bigram)
 bigram_content = [bigram_mod[i] for i in processed_content]
 
+# lemmatisation
+nlp=spacy.load('en',disable=['parser','ner'])
+allowed_postags = ['NOUN','ADJ','VERB','ADV']
+lemmatised_content=[]
+for each_article in bigram_content:
+    try:
+        doc = nlp(" ".join(each_article))
+        lemmatised_content.append([tokens1.lemma_ for tokens1 in doc if tokens1.pos_ in allowed_postags])
+    except:
+        print(each_article)
+
 # Creating the corpus
-corpus_bigram = [dictionary.doc2bow(text) for text in bigram_content]
+corpus_bigram = [dictionary.doc2bow(text) for text in lemmatised_content]
 
 # Labelling
 labels = []
