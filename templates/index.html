@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>News Snippets</title>
-</head>
-<body>
-    <h1>Welcome!</h1>
-</body>
+<html lang="en">
+ <head>
+  <title>News Snippets</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+ </head>
+ <body>
+  <div class="navbar">
+   <a href=#>Newsnippets</a>
+   <a class ="right" href="{{ url_for('home') }}">Register</a>
+   <a class ="right" href="{{ url_for('home') }}">Login</a>
+   <a class ="right" href="{{ url_for('news') }}">News</a>
+
+  </div>
+  </body>
 </html>

@@ -32,6 +32,7 @@ body{
 
 /* Creating the horizontal scrolling */
 .news{
+    position: relative;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
@@ -40,7 +41,7 @@ body{
 
 /* cards */
 .articles{
-    perspective: 100rem;
+    
     padding: 40px;
     margin:40px;
     border: solid grey 2px;
@@ -54,12 +55,3 @@ body{
 ::-webkit-scrollbar {
     display: none;
   }
-
-/* Styling the card */
-.articlesFront{
-    transition: all .8s;
-}
-
-.articlesFront:hover{
-    transform: rotateY(180deg);
-}
