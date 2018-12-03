@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <title>News Snippets</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+ </head>
+ <body>
+  <div class="navbar">
+   <a href=#>Newsnippets</a>
+   <a class ="right" href="{{ url_for('home') }}">Signout</a>
+   <a class ="right" href="{{ url_for('about') }}">About</a>
+   <a class ="right" href="{{ url_for('news') }}">Home</a>
+  </div>
+  {% for i in range(data) %}
+    <div class="heading"><h1>Section</h1></div>
+    <div class="news">
+    {% for articles in content %}
+        <div class="articles">
+            <div class="articlesFront">
+                <p>{{ articles[:10] }}</p>
+            </div>
+            <div class="articlesBack">
+                <input type="submit" value="open"/>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+  {% endfor %}
+ </body>
+</html>
