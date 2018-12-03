@@ -26,7 +26,7 @@ summaries_np = np.array(summaries)
 titles_np = np.array(titles)
 
 for i in range(9):
-    bool_vector = label_np[label_np==i]
+    bool_vector = label_np==i
     url.append(url_np[bool_vector].tolist())
     dop.append(dop_np[bool_vector].tolist())
     summary.append(summaries_np[bool_vector].tolist())
