@@ -13,12 +13,14 @@
    <a class ="right" href="{{ url_for('news') }}">Home</a>
   </div>
   {% for i in range(data) %}
-    <div class="heading"><h1>Section {{ i }}</h1></div>
+    <div class="heading"><h1>{{ labels[i] }}</h1></div>
     <div class="news">
-    {% for articles in content[i] %}
-        <div class="articles">        
-            <p>{{ articles[:10] }}</p>
+    {% for articles in range(content[i]| length) %}
+        <a href={{ url[i][articles] }} target="_blank">
+        <div class="articles">
+                <p>{{ content[i][articles][:220] }}</p>
         </div>
+        </a>
     {% endfor %}
     </div>
   {% endfor %}
