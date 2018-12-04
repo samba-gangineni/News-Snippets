@@ -15,9 +15,9 @@ def home():
 
 @app.route('/news',methods=['GET','POST'])
 def news():
+    labels=['Stock Market','Sports News','Asian Markets','Financials and Banks','Deals, Bonds and currency','Media,Technology, Environment, Auto and Energy','US news, politics, sports and health','World news','Business news']
     title,dop,content,url = picking_news_for_display()
-    print(content[0])
-    return render_template('news.html',data=9,title=title,dop=dop,content = content,url=url)
+    return render_template('news.html',data=9,title=title,dop=dop,content = content,url=url,labels=labels)
 
 @app.route('/about',methods=['GET','POST'])
 def about():
@@ -60,5 +60,4 @@ def picking_news_for_display():
     return title_display, dop_display, summary_display, url_display
 
 if __name__=="__main__":
-    picking_news_for_display()
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
