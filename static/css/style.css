@@ -30,12 +30,21 @@ body{
     color: black;
 }
 
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 700px) {
+    .navbar a {
+        float: none;
+        width: 100%;
+    }
+}
 /* Creating the horizontal scrolling */
 .news{
-    position: relative;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    /* overflow-x: scroll; */
+    /* overflow-y: hidden; */
+    /* white-space: nowrap; */
     margin: 40px;
 }
 
@@ -45,13 +54,28 @@ body{
     padding: 40px;
     margin:40px;
     border: solid grey 2px;
+    background-color: darkslategray;
     border-radius: 20px;
-    display: inline-block;
-    height: 150px;
-    width: 90px;
+    /* display: inline-block; */
+    flex: 0 0 auto;
+    height: 250px;
+    width: 150px;
 }
 
 /* hiding the scroll bar */
 ::-webkit-scrollbar {
     display: none;
   }
+
+  p{
+      color: wheat;
+      white-space: pre-line;
+      font-size: 17px;
+  }
+
+  /* removing the text-decoration */
+a {
+    text-decoration: none;
+    color: wheat;
+
+}
