@@ -22,6 +22,9 @@ def news():
 @app.route('/about',methods=['GET','POST'])
 def about():
     return render_template('about.html')
+@app.route('/topic_vis',methods=['GET','POST'])
+def vis():
+	return render_template('topic_model.html')
 
 def picking_news_for_display():
     # Reading in the sorted news
