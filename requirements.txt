@@ -41,7 +41,7 @@ pathlib2==2.3.3
 plac==0.9.6
 pluggy==0.8.0
 preshed==2.0.1
-py==1.7.0
+py==1.10.0
 pyLDAvis==2.1.2
 pyparsing==2.3.0
 pytest==4.0.1
